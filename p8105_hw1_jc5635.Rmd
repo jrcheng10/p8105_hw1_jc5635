@@ -1,0 +1,54 @@
+---
+title: "Homework 1"
+output: github_document
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(tidyverse)
+
+```
+
+## Problem 1
+
+```{r desc}
+
+data("penguins", package = "palmerpenguins")
+head(penguins, 10)
+
+```
+
+The `penguins` dataset consists of `r ncol(penguins)` variables and `r nrow(penguins)` records. Penguin characteristics include both qualitative fields (e.g. `sex`, `species`, and `island`) and quantitative fields (e.g. `body_mass_g` and `flipper_length_mm`).
+
+The means of `body_mass_g` and `flipper_length_mm` are `r round(mean(penguins$body_mass_g, na.rm = TRUE), 3)` and `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), 3)`, respectively.
+
+```{r plot}
+
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+ggsave("penguins_scatterplot.pdf", height = 4, width = 6)
+
+```
+
+## Problem 2
+
+
+```{r df}
+
+samp = tibble(
+  norm = rnorm(n = 10),
+  logical = norm > 0,
+  char = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+  factor = c("red", "yellow", "green", "yellow", "green", "green", "red", "green", "yellow", "green")
+)
+
+```
+
+The means of `norm`, `logical`, `char`, and `factor` are `r round(mean(pull(samp, norm), 3))`, `r mean(pull(samp, logical))`, `r mean(pull(samp, char))`, and `r mean(pull(samp, factor))`, respectively. Means are returned for `norm` and `logical`, since `norm` is a numeric variable and `logical` consists of `TRUE` (i.e. `1`) and `FALSE` (i.e. `0`) values.
+No means are returned for `char` and `factor`, as mathematical operations cannot be performed on their values.
+
+```{r convert, eval = FALSE}
+as.numeric(c(samp$logical, samp$char, samp$factor))
+```
+
+The means of `logical`, `char`, and `factor` continue to be `r mean(pull(samp, as.numeric(logical)))`, `r mean(pull(samp, as.numeric(char)))`, and `r mean(pull(samp, as.numeric(factor)))`, respectively. The values of `char` and `factor` are non-numeric and non-logical, and are thus not affected by the application of the `as.numeric` function.
